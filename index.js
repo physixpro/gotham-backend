@@ -21,6 +21,10 @@ app.get('/evaluations', async (req,res) => {
     res.json(evaluations)
 })
 
+app.get('/', async (req,res) => {
+res.json("Hello World")
+})
+
 app.post('/user_info', async (req, res) => {
    const form = req.body
    const x = await db.collection('user_info').insertOne(form)
@@ -37,3 +41,5 @@ app.post('/evaluations', async(req,res) => {
 
 const port = process.env.PORT || 3001
 app.listen(port, () => console.log(`Server is running on port ${port}...`))
+
+
