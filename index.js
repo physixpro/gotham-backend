@@ -16,9 +16,27 @@ db.once('open', function callback () {
     console.log('Database is up and running')
 })
 
+app.put('/evaluation/:id', async(req,res) => {
+    const id = req.params.id
+    const x = await db.collection('evaluations').updateOne({_id: new ObjectID(id)}).toArray()
+    res.json(x)
+})
+
 app.get('/evaluations', async (req,res) => {
     const evaluations = await db.collection('evaluations').find({}).toArray()
     res.json(evaluations)
+})
+
+app.get('/evaluation/:id', async(req,res) => {
+    const id = req.params.id
+    const user = await db.collection('evaluations').find({_id:new ObjectID(id)}).toArray()
+    res.json(user)
+})
+
+app.delete('/evaluation/:id', async (req,res) => {
+    const id = req.params.id
+    const x = await db.collection('evaluations').deleteOne({_id:new ObjectID(id)})
+    res.json("User deleted")
 })
 
 app.get('/', async (req,res) => {
