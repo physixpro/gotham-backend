@@ -18,7 +18,8 @@ db.once('open', function callback () {
 
 app.put('/evaluation/:id', async(req,res) => {
     const id = req.params.id
-    const x = await db.collection('evaluations').updateOne({_id: new ObjectID(id)}).toArray()
+    const body = req.body
+    const x = await db.collection('evaluations').updateOne({_id: new ObjectID(id)}, {$set: {name:body.name, email:body.email}})
     res.json(x)
 })
 
