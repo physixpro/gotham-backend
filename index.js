@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const app = express()
 const ObjectID = require('mongodb').ObjectID
+const nodemailer = require('nodemailer')
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({extended:true}))
@@ -15,6 +16,39 @@ db.on('error', console.error.bind(console, 'connection error'))
 db.once('open', function callback () {
     console.log('Database is up and running')
 })
+let transporter = nodemailer.createTransport({
+    // host: "smtp.gmail.com",
+    // port: 465,
+    // secure: false,
+    service: "Gmail",
+    auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASSWORD,
+    },
+});
+// to param is who we are going to send the email to
+async function sendEmail(to,subject,text,html) {
+   // configuration 
+    
+try {
+    let info = await transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to,
+        subject,
+        text,
+        html,
+    });
+
+    console.log("Message sent: %s", info.MessageId);
+
+}
+catch(error) {
+    console.log(error)
+}
+
+}
+
+
 
 app.put('/evaluation/:id', async(req,res) => {
     const id = req.params.id
@@ -53,7 +87,20 @@ app.post('/user_info', async (req, res) => {
 
 app.post('/evaluations', async(req,res) => {
     const athleteResult = req.body
-    const x = await db.collection('evaluations').insertOne(athleteResult)
+    const level = req.body.level
+    const email = req.body.email
+console.log('we are here')
+    try{
+        const x = await db.collection('evaluations').insertOne(athleteResult)
+        // email sent to the user
+        await sendEmail(email,'class assessment',`congrats your level assessment is ${level}`,`<div>congrats your level assessment is ${level}</div>`)
+        // email sent to the front desk
+        await sendEmail('esorts.k990@gmail.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>` )
+    }
+    catch (error) {
+        console.log(error)
+    }
+   
     console.log(athleteResult)
     res.json('evaluated successfully')
 })
