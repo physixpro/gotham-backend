@@ -20,10 +20,10 @@ let transporter = nodemailer.createTransport({
     // host: "smtp.gmail.com",
     // port: 465,
     // secure: false,
-    service: "Gmail",
+    service: "OUTLOOK",
     auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASSWORD,
+        user: process.env.OUTLOOK_USER,
+        pass: process.env.OUTLOOK_PASSWORD,
     },
 });
 // to param is who we are going to send the email to
@@ -95,7 +95,7 @@ console.log('we are here')
         // email sent to the user
         await sendEmail(email,'class assessment',`congrats your level assessment is ${level}`,`<div>congrats your level assessment is ${level}</div>`)
         // email sent to the front desk
-        await sendEmail('esorts.k990@gmail.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>` )
+        await sendEmail('evaluation@gothamgymnastics.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>` )
     }
     catch (error) {
         console.log(error)
