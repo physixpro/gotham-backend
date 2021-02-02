@@ -32,7 +32,8 @@ async function sendEmail(to,subject,text,html) {
     
 try {
     let info = await transporter.sendMail({
-        from: process.env.GMAIL_USER,
+        // from: process.env.GMAIL_USER,
+        from: process.env.OUTLOOK_USER,
         to,
         subject,
         text,
