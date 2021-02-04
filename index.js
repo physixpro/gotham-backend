@@ -35,7 +35,7 @@ transporter.use('compile', hbs({
 }))
 
 // to param is who we are going to send the email to
-async function sendEmail(to,subject,text,html) {
+async function sendEmail(to,subject,text,html,template) {
    // configuration 
     
 try {
@@ -47,7 +47,7 @@ try {
         text,
         html,
         //added template here
-        template: 'email'
+        template: 'mail'
     });
 
     console.log("Message sent: %s", info.MessageId);
@@ -100,14 +100,16 @@ app.post('/evaluations', async(req,res) => {
     const athleteResult = req.body
     const level = req.body.level
     const email = req.body.email
+  
 console.log('we are here')
+
     try{
         const x = await db.collection('evaluations').insertOne(athleteResult)
         // email sent to the user
         // * attempt to pass in template here next
-        await sendEmail(email,'class assessment',`congrats your level assessment is ${level}`,`<div>congrats your level assessment is ${level}</div>`)
+        await sendEmail(email,'class assessment',`congrats your level assessment is ${level}`,`<div>congrats your level assessment is ${level}</div>`,template)
         // email sent to the front desk
-        await sendEmail('evaluation@gothamgymnastics.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>` )
+        await sendEmail('evaluation@gothamgymnastics.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>`,template)
     }
     catch (error) {
         console.log(error)
