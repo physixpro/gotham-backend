@@ -52,11 +52,11 @@ async function sendEmail(to, subject, text, html) {
       to,
       subject,
       text,
-      html: 'Embedded image: <img src = "cid:logo.png"/>',
+      html,
     
       //added attachment here
      attachments: [
-         {filename: 'logo.png', path: './logo.png', cid: 'logo.png'} 
+         {path: './logo.png', cid: 'logo.png'} 
      ]
     });
 
@@ -126,7 +126,9 @@ app.post("/evaluations", async (req, res) => {
       email,
       "class assessment",
       `congrats your level assessment is ${level}`,
-      `<h1><img src="logo.png" alt="Girl in a jacket" width="100" height="200"></h1><h1>congrats your level assessment is ${level}</h1>`
+      // this seems to work by embedding the images, refer to the send method above i think i need the path in order for it to identify the file
+      `Embedded image: <img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`,
+      `Embedded image: <img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`
     );
     // email sent to the front desk
     await sendEmail(
