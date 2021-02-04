@@ -5,6 +5,8 @@ const cors = require('cors')
 const app = express()
 const ObjectID = require('mongodb').ObjectID
 const nodemailer = require('nodemailer')
+//imported handle bars here
+const hbs = require('nodemailer-express-handlebars')
 app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({extended:true}))
@@ -26,6 +28,12 @@ let transporter = nodemailer.createTransport({
         pass: process.env.OUTLOOK_PASSWORD,
     },
 });
+// added view for template here
+transporter.use('compile', hbs({
+    viewEngine: 'express-handlebars',
+    viewPath: './views/'
+}))
+
 // to param is who we are going to send the email to
 async function sendEmail(to,subject,text,html) {
    // configuration 
@@ -38,6 +46,8 @@ try {
         subject,
         text,
         html,
+        //added template here
+        template: 'email'
     });
 
     console.log("Message sent: %s", info.MessageId);
@@ -94,6 +104,7 @@ console.log('we are here')
     try{
         const x = await db.collection('evaluations').insertOne(athleteResult)
         // email sent to the user
+        // * attempt to pass in template here next
         await sendEmail(email,'class assessment',`congrats your level assessment is ${level}`,`<div>congrats your level assessment is ${level}</div>`)
         // email sent to the front desk
         await sendEmail('evaluation@gothamgymnastics.com','class assessment',`student is in level ${level}`,`<div>student is in level ${level}</div>` )
