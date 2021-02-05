@@ -33,13 +33,13 @@ let transporter = nodemailer.createTransport({
   },
 });
 // added view for template here
-transporter.use(
-  "compile",
-  hbs({
-    viewEngine: "express-handlebars",
-    viewPath: "./views/",
-  })
-);
+// transporter.use(
+//   "compile",
+//   hbs({
+//     viewEngine: "express-handlebars",
+//     viewPath: "./views/",
+//   })
+// );
 
 // to param is who we are going to send the email to
 async function sendEmail(to, subject, text, html) {
@@ -56,7 +56,7 @@ async function sendEmail(to, subject, text, html) {
     
       //added attachment here
      attachments: [
-         {path: './logo.png', cid: 'logo.png'} 
+         {path: './logo.jpg', cid: 'logo.jpg'} 
      ]
     });
 
@@ -115,6 +115,9 @@ app.post("/evaluations", async (req, res) => {
   const athleteResult = req.body;
   const level = req.body.level;
   const email = req.body.email;
+  const athleteName = req.body.athleteName;
+  const parentName = req.body.parentName;
+  const date = req.body.date;
 
   console.log("we are here");
 
@@ -127,15 +130,16 @@ app.post("/evaluations", async (req, res) => {
       "class assessment",
       `congrats your level assessment is ${level}`,
       // this seems to work by embedding the images, refer to the send method above i think i need the path in order for it to identify the file
-      `Embedded image: <img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`,
-      `Embedded image: <img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`
+      `<img src = "cid:logo.jpg" width="800" height="250"/> <h1 style=" color: #6A3490; font-family: 'Arial Black'; font-size: 16px; margin: 0; text-transform: uppercase;">Hey ${parentName}, great news! ${athleteName} has qualified for our ${level} level program! You Got this! Because we got YOU!</h1>`,
+      // `<img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`
     );
     // email sent to the front desk
     await sendEmail(
       "evaluation@gothamgymnastics.com",
       "class assessment",
-      `student is in level ${level}`,
-      `<div>student is in level ${level}</div>`
+      `<img src = "cid:logo.jpg" width="800" height="250"/> <h2 style=" color: #6A3490; font-family: 'Arial Black'; font-size: 16px; margin: 0; text-transform: uppercase;">On ${date}, ${athleteName} was evaluated to be ${level} level</h2>`,
+      `<img src = "cid:logo.jpg" width="800" height="250"/> <h2 style=" color: #6A3490; font-family: 'Arial Black'; font-size: 16px; margin: 0; text-transform: uppercase;">On ${date}, ${athleteName} was evaluated to be ${level} level</h2>`
+      // `<div>student is in level ${level}</div>`
     );
   } catch (error) {
     console.log(error);
