@@ -130,7 +130,7 @@ app.post("/evaluations", async (req, res) => {
       "class assessment",
       `congrats your level assessment is ${level}`,
       // this seems to work by embedding the images, refer to the send method above i think i need the path in order for it to identify the file
-      `<img src = "cid:logo.jpg" width="800" height="250"/> <h1 style=" color: #6A3490; font-family: 'Arial Black'; font-size: 16px; margin: 0; text-transform: uppercase;">Hey ${parentName}, great news! ${athleteName} has qualified for our ${level} level program! You Got this! Because we got YOU!</h1>`,
+      `<img src = "cid:logo.jpg" width="800" height="250"/> <h1 style=" color: #6A3490; font-family: 'Arial Black'; font-size: 16px; margin: 0; text-transform: uppercase;">Hey ${parentName}, great news! ${athleteName} has qualified for our ${level} level program! You Got this!<br>Because we got YOU!<br><br><br></h1><h3 style=" color: #6A3490; font-family: 'Arial Black';">Gotham Gymnastics</h3><h4>phone:(718) 722-7211</h4><h4>email:info@gothamgymnastics.com</h4><h4>315 Douglass St. Brooklyn, NY</h4><h4>11217, USA</h4><h4><a href="www.gothamgymnastics.com">www.gothamgymnastics.com</h4>`,
       // `<img src = "cid:logo.png" width="200" height="200"/> <h1>Hello guys please see this link ${level}</h1>`
     );
     // email sent to the front desk
