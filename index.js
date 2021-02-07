@@ -7,6 +7,7 @@ const ObjectID = require("mongodb").ObjectID;
 const nodemailer = require("nodemailer");
 //imported handle bars here
 const hbs = require("nodemailer-express-handlebars");
+const { restart } = require("nodemon");
 app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -77,6 +78,10 @@ app.put("/evaluation/:id", async (req, res) => {
     );
   res.json(x);
 });
+
+app.get("/", async (req,res) => {
+  res.redirect("https://gothamevaluation.com")
+})
 
 app.get("/evaluations", async (req, res) => {
   const evaluations = await db.collection("evaluations").find({}).toArray();
